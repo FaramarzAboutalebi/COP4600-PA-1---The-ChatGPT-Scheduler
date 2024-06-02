@@ -1,9 +1,9 @@
 # PA-1---The-ChatGPT-Scheduler
 
 ### Megan: FIFO Algorithm
-- [ ] Develop prompts for the FIFO algorithm.
-- [ ] Test the FIFO algorithm.
-- [ ] Save and share the prompt history.
+- [x] Develop prompts for the FIFO algorithm.
+- [x] Test the FIFO algorithm.
+- [x] Save and share the prompt history.
 
 ### Dilly: Pre-emptive SJF Algorithm
 - [ ] Develop prompts for the Pre-emptive SJF algorithm.
