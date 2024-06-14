@@ -6,9 +6,9 @@
 - [x] Save and share the prompt history.
 
 ### Dilly: Pre-emptive SJF Algorithm
-- [x ] Develop prompts for the Pre-emptive SJF algorithm.
-- [ x] Test the Pre-emptive SJF algorithm.
-- [ x ] Save and share the prompt history.
+- [x] Develop prompts for the Pre-emptive SJF algorithm.
+- [x] Test the Pre-emptive SJF algorithm.
+- [x] Save and share the prompt history.
 
 ### Member C: Round Robin Algorithm
 - [ ] Develop prompts for the Round Robin algorithm.
