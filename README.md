@@ -15,7 +15,7 @@
 - [x] Test the Round Robin algorithm.
 - [x] Save and share the prompt history.
 
-### Member D: Integration and Final Refinement
+### Faramarz Aboutalebi: Integration and Final Refinement
 - [ ] Integrate the code from all members.
 - [ ] Implement error handling.
 - [ ] Generate output in the specified format.
