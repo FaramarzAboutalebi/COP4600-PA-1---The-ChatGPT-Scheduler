@@ -10,7 +10,7 @@
 - [x] Test the Pre-emptive SJF algorithm.
 - [x] Save and share the prompt history.
 
-### Member C: Round Robin Algorithm
+### Franco : Round Robin Algorithm
 - [x] Develop prompts for the Round Robin algorithm.
 - [x] Test the Round Robin algorithm.
 - [x] Save and share the prompt history.
