@@ -11,9 +11,9 @@
 - [x] Save and share the prompt history.
 
 ### Member C: Round Robin Algorithm
-- [ ] Develop prompts for the Round Robin algorithm.
-- [ ] Test the Round Robin algorithm.
-- [ ] Save and share the prompt history.
+- [x] Develop prompts for the Round Robin algorithm.
+- [x] Test the Round Robin algorithm.
+- [x] Save and share the prompt history.
 
 ### Member D: Integration and Final Refinement
 - [ ] Integrate the code from all members.
