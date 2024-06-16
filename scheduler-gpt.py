@@ -1,3 +1,7 @@
+# Dilly Jacques
+# Faramarz Aboutalebi
+# Franco Molina
+# Megan Bailey
 import sys
 from collections import deque
 
