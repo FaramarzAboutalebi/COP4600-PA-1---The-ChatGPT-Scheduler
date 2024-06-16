@@ -21,4 +21,5 @@
 - [x] Generate output in the specified format.
 - [x] Conduct final testing.
 - [x] Prepare the final conversation file.
-- [ ] Write the final report.
+- [x] Write the final report.
+- [x] Bonus Feature
