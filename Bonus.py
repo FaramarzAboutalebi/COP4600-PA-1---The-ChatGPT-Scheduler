@@ -62,26 +62,40 @@ def format_time(string, number):
 
 def fifo_scheduling(processes, runtime):
     output = []
-    # manually fix the white spaces
+    
+    # Add the number of processes and the scheduling algorithm being used to the output
+    # HUMAN COMMENT: Faramarz manually fixed the white spaces
     output.append(format_time('processes', len(processes)))
     output.append("Using First-Come First-Served")
 
+    # Create a copy of the processes list and sort the copy by arrival time
     sorted_processes = sorted(processes, key=lambda x: x.arrival)
     current_time = 0
     event_log = []
 
     for process in sorted_processes:
+        # Record the arrival event
         event_log.append((process.arrival, 'arrived', process.name))
+
+        # If the current time is less than the process's arrival time, wait until it arrives
         if current_time < process.arrival:
             current_time = process.arrival
-        
+
+        # Record the start and finish times
         process.start_time = current_time
         process.finish_time = process.start_time + process.burst
+
+        # Record the time the process is selected and finished
         event_log.append((process.start_time, 'selected', process.name, process.burst))
         event_log.append((process.finish_time, 'finished', process.name))
+
+        # Update current time
         current_time = process.finish_time
 
+    # Sort events by time and priority
     event_log.sort(key=lambda x: (x[0], {'arrived': 0, 'finished': 1, 'selected': 2}[x[1]]))
+
+    # Add the timeline as a table to the output
     selected_processes = set()
     for time in range(runtime):
         events_at_time = [event for event in event_log if event[0] == time]
@@ -92,6 +106,12 @@ def fifo_scheduling(processes, runtime):
                 elif event[1] == 'finished':
                     selected_processes.discard(event[2])
                     output.append(f"{format_time('Time',time)} : {event[2]} {event[1]}")
+                    # Check if the scheduler will be idle at the next time tick
+                    # HUMAN COMMENT: Megan modified the logic on the line below. The AI generated
+                    # code was producing incorrect output as it would print Idle even if the
+                    # system was not going to become idle. Instead of checking to find if any
+                    # number of events occur at a time, we check to see if exactly one event
+                    # occurs at the time.
                     if [e[0] for e in event_log].count(time) == 1 and not selected_processes:
                         output.append(f"{format_time('Time', time)} : Idle")
                 elif event[1] == 'selected':
@@ -102,6 +122,8 @@ def fifo_scheduling(processes, runtime):
                 output.append(f"{format_time('Time', time)} : Idle")
 
     output.append(f"Finished at time  {runtime}\n")
+
+    # Calculate and add wait time, turnaround time, and response time for each process to the output
     output.extend(calculate_metrics(processes, runtime))
 
     return output
@@ -109,11 +131,13 @@ def fifo_scheduling(processes, runtime):
 # Pre-emptive Shortest Job First (SJF)
 def preemptive_sjf(original_processes, runtime):
     output = []
-    # manually fix the white space
     
+    # HUMAN COMMENT: Faramarz manually fixed the white space
+    # Add the number of processes and the scheduling algorithm being used to the output
     output.append(format_time('processes', len(original_processes)))
     output.append("Using preemptive Shortest Job First")
 
+    # Create a copy of the processes list and sort the copy by arrival time
     processes = original_processes.copy()
     processes.sort(key=lambda x: x.arrival)
     current_time = 0
@@ -122,11 +146,13 @@ def preemptive_sjf(original_processes, runtime):
     event_log = []
 
     while current_time < runtime:
+        # Handle arriving processes
         while processes and processes[0].arrival <= current_time:
             process = processes.pop(0)
             ready_queue.append(process)
             event_log.append((current_time, 'arrived', process.name))
 
+        # Sort ready queue by remaining burst time and possibly preempt current process
         if ready_queue:
             ready_queue.sort(key=lambda x: x.remaining_burst)
             if not current_process or (ready_queue and ready_queue[0].remaining_burst < current_process.remaining_burst):
@@ -137,6 +163,7 @@ def preemptive_sjf(original_processes, runtime):
                     current_process.start_time = current_time
                 event_log.append((current_time, 'selected', current_process.name, current_process.remaining_burst))
 
+        # Execute current process
         if current_process:
             current_process.remaining_burst -= 1
             if current_process.remaining_burst == 0:
@@ -144,11 +171,17 @@ def preemptive_sjf(original_processes, runtime):
                 event_log.append((current_time + 1, 'finished', current_process.name))
                 current_process = None
 
+        # Move time forward
         current_time += 1
+
+        # Check if the system is idle
         if current_process is None and not ready_queue and not any(process.arrival <= current_time for process in processes):
             event_log.append((current_time, 'idle'))
 
+    # Sort events by time and priority
     event_log.sort(key=lambda x: (x[0], {'arrived': 0, 'finished': 1, 'selected': 2, 'idle': 3}[x[1]]))
+
+    # Add the timeline as a table to the output
     for time in range(runtime):
         events_at_time = [event for event in event_log if event[0] == time]
         if events_at_time:
@@ -163,6 +196,8 @@ def preemptive_sjf(original_processes, runtime):
                     output.append(f"Time {time:3d} : Idle")
 
     output.append(f"Finished at time {runtime:3d}\n")
+
+    # Calculate and add wait time, turnaround time, and response time for each process to the output
     metrics = calculate_metrics(original_processes, runtime)
     output.extend(metrics)
 
@@ -172,11 +207,12 @@ def preemptive_sjf(original_processes, runtime):
 def round_robin_scheduling(processes, time_slice, run_for):
     queue = deque()
     processes.sort(key=lambda x: x.arrival)
-    time = 0
+    time = 0 # Start time at 0
     scheduled = []
     process_map = {p.name: p for p in processes}
 
     while time < run_for:
+        # Add all processes that have arrived by the current time to the queue
         while processes and processes[0].arrival <= time:
             arriving_process = processes.pop(0)
             scheduled.append((time, arriving_process.name, "arrived"))
@@ -190,14 +226,18 @@ def round_robin_scheduling(processes, time_slice, run_for):
             run_time = min(current_process.remaining_burst, time_slice)
             scheduled.append((time, current_process.name, "selected", current_process.remaining_burst))
 
+            # Execute the current process for the time slice or until it finishes
             for _ in range(run_time):
                 time += 1
                 current_process.remaining_burst -= 1
+
+                # Check for newly arriving processes during execution
                 while processes and processes[0].arrival <= time:
                     arriving_process = processes.pop(0)
                     scheduled.append((time, arriving_process.name, "arrived"))
                     queue.append(arriving_process)
 
+                # If the current time exceeds the run_for limit, stop execution
                 if time >= run_for:
                     break
 
