@@ -432,7 +432,7 @@ def write_scheduling_to_file(file, scheduled, total_time, processes, run_for, pr
     if total_time < run_for:
         file.write(f"Time {total_time}: Idle\n")
         html_output += f"<tr><td>{total_time}</td><td>Idle</td></tr>\n"
-    file.write(f"Finished at time  {run_for}\n")
+    file.write(f"Finished at time  {run_for}\n\n")
     html_output += f"<tr><td colspan='2'>Finished at time {run_for}</td></tr>\n"
 
     html_output += "</table>"
