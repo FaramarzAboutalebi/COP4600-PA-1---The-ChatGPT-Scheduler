@@ -35,11 +35,11 @@ def calculate_metrics(processes, runtime):
             turnaround_time = process.finish_time - process.arrival
             response_time = process.start_time - process.arrival
             # Manually set the white spaces
-            metrics.append(f"{process.name} {format_time('wait', wait_time)} {format_time('turnaround', turnaround_time)} {format_time('response', response_time)}")
+            metrics.append(f"{process.name} {format('wait', wait_time)} {format('turnaround', turnaround_time)} {format('response', response_time)}")
     return metrics
 
 # manually adding the function below to take care of the white space 
-def format_time(string, number): 
+def format(string, number): 
     if string == "processes":
         number_str = str(number)
         if len(number_str) == 1:
@@ -65,7 +65,7 @@ def fifo_scheduling(processes, runtime):
     
     # Add the number of processes and the scheduling algorithm being used to the output
     # HUMAN COMMENT: Faramarz manually fixed the white spaces
-    output.append(format_time('processes', len(processes)))
+    output.append(format('processes', len(processes)))
     output.append("Using First-Come First-Served")
 
     # Create a copy of the processes list and sort the copy by arrival time
@@ -102,10 +102,10 @@ def fifo_scheduling(processes, runtime):
         if events_at_time:
             for event in events_at_time:
                 if event[1] == 'arrived':
-                    output.append(f"{format_time('Time', time)} : {event[2]} {event[1]}")
+                    output.append(f"{format('Time', time)} : {event[2]} {event[1]}")
                 elif event[1] == 'finished':
                     selected_processes.discard(event[2])
-                    output.append(f"{format_time('Time',time)} : {event[2]} {event[1]}")
+                    output.append(f"{format('Time',time)} : {event[2]} {event[1]}")
                     # Check if the scheduler will be idle at the next time tick
                     # HUMAN COMMENT: Megan modified the logic on the line below. The AI generated
                     # code was producing incorrect output as it would print Idle even if the
@@ -113,13 +113,13 @@ def fifo_scheduling(processes, runtime):
                     # number of events occur at a time, we check to see if exactly one event
                     # occurs at the time.
                     if [e[0] for e in event_log].count(time) == 1 and not selected_processes:
-                        output.append(f"{format_time('Time', time)} : Idle")
+                        output.append(f"{format('Time', time)} : Idle")
                 elif event[1] == 'selected':
                     selected_processes.add(event[2])
-                    output.append(f"{format_time('Time', time)} : {event[2]} {event[1]} (burst   {event[3]})")
+                    output.append(f"{format('Time', time)} : {event[2]} {event[1]} (burst   {event[3]})")
         else:
             if not selected_processes:
-                output.append(f"{format_time('Time', time)} : Idle")
+                output.append(f"{format('Time', time)} : Idle")
 
     output.append(f"Finished at time  {runtime}\n")
 
@@ -134,7 +134,7 @@ def preemptive_sjf(original_processes, runtime):
     
     # HUMAN COMMENT: Faramarz manually fixed the white space
     # Add the number of processes and the scheduling algorithm being used to the output
-    output.append(format_time('processes', len(original_processes)))
+    output.append(format('processes', len(original_processes)))
     output.append("Using preemptive Shortest Job First")
 
     # Create a copy of the processes list and sort the copy by arrival time
@@ -284,7 +284,7 @@ def print_scheduling(scheduled, total_time, processes, run_for, process_map=None
             wait_time = (p.finish_time - p.arrival - p.burst)
             turnaround_time = p.finish_time - p.arrival
             response_time = p.start_time - p.arrival
-            print(f"{p.name} {format_time('wait', wait_time)} {format_time('turnaround', turnaround_time)} {format_time('response', response_time)}")
+            print(f"{p.name} {format('wait', wait_time)} {format('turnaround', turnaround_time)} {format('response', response_time)}")
             
             
 def parse_input_file(filename):
@@ -452,7 +452,7 @@ def write_scheduling_to_file(file, scheduled, total_time, processes, run_for, pr
             wait_time = (p.finish_time - p.arrival - p.burst)
             turnaround_time = p.finish_time - p.arrival
             response_time = p.start_time - p.arrival
-            file.write(f"{p.name} {format_time('wait', wait_time)} {format_time('turnaround', turnaround_time)} {format_time('response', response_time)}\n")
+            file.write(f"{p.name} {format('wait', wait_time)} {format('turnaround', turnaround_time)} {format('response', response_time)}\n")
             html_output += f"<tr><td>{p.name}</td><td>{wait_time}</td><td>{turnaround_time}</td><td>{response_time}</td></tr>\n"
 
         html_output += "</table>\n"
@@ -485,7 +485,7 @@ def main():
     elif scheduling_algorithm == 'rr':
         output_file = input_file.split('.')[0] + '.out'
         with open(output_file, 'w') as file:
-            file.write(format_time('processes', len(processes)) + '\n')
+            file.write(format('processes', len(processes)) + '\n')
             file.write("Using Round-Robin\n")
             if time_slice is not None:
                 file.write(f"Quantum   {time_slice}\n\n")
